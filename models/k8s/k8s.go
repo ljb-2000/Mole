@@ -32,6 +32,20 @@ type VtgateServiceData struct {
 	MysqlServerPort int
 }
 
+// VtgateRCData
+type VtgateRCData struct {
+	Cell            string
+	VitessImage     string
+	Replicas        int
+	MysqlServerPort int
+}
+
+// NamespaceData
+type NamespaceData struct {
+	Name   string
+	Labels map[string]string
+}
+
 // NewK8sClient - create an new k8s client
 func NewK8sClient(cfgfile string) (*K8sClient, error) {
 
