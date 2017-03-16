@@ -11,6 +11,27 @@ type K8sClient struct {
 	clientSet  *kubernetes.Clientset
 }
 
+// VttabletPodData
+type VttabletPodData struct {
+	Uid               string
+	Keyspace          string
+	Shard_label       string
+	Alias             string
+	Vitess_image      string
+	Port              int
+	Grpc_port         int
+	Tablet_type       string
+	Backup_flags      string
+	Vtdataroot_volume string
+	Shard             string
+}
+
+// VtgateServiceData
+type VtgateServiceData struct {
+	Cell            string
+	MysqlServerPort int
+}
+
 // NewK8sClient - create an new k8s client
 func NewK8sClient(cfgfile string) (*K8sClient, error) {
 
