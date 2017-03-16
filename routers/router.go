@@ -10,7 +10,7 @@ func init() {
 
 	// Vitess
 	beego.Router("/api/keyspaces", &controllers.KeyspacesController{})
-	beego.Router("/api/vtctl", &controllers.KeyspacesController{})
+	beego.Router("/api/vtctl", &controllers.VtctlController{})
 	beego.Router("/api/shards", &controllers.ShardsController{})
 	beego.Router("/api/tablets", &controllers.TabletsController{})
 	beego.Router("/api/schema", &controllers.SchemaController{})

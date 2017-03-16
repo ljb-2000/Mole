@@ -11,9 +11,10 @@ func defaultConfig() {
 	beego.BConfig.Listen.EnableAdmin = beego.AppConfig.DefaultBool("default::enableAdmin", false)
 	beego.BConfig.WebConfig.AutoRender = beego.AppConfig.DefaultBool("default::autoRender", true)
 	beego.BConfig.WebConfig.DirectoryIndex = beego.AppConfig.DefaultBool("default::directoryIndex", false)
-	beego.BConfig.Listen.Graceful = beego.AppConfig.DefaultBool("graceful", false)
-	beego.BConfig.WebConfig.Session.SessionOn = beego.AppConfig.DefaultBool("sessionOn", false)
-	beego.BConfig.WebConfig.Session.SessionName = beego.AppConfig.DefaultString("sessionName", "Mole")
+	beego.BConfig.CopyRequestBody = beego.AppConfig.DefaultBool("default::copyRequestBody", true)
+	beego.BConfig.Listen.Graceful = beego.AppConfig.DefaultBool("default::graceful", false)
+	beego.BConfig.WebConfig.Session.SessionOn = beego.AppConfig.DefaultBool("default::sessionOn", false)
+	beego.BConfig.WebConfig.Session.SessionName = beego.AppConfig.DefaultString("default::sessionName", "Mole")
 
 }
 

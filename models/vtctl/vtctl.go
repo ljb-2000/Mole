@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/juju/errors"
+	"github.com/zssky/log"
 	"github.com/zssky/tc"
 	"github.com/zssky/tc/http"
 )
@@ -57,6 +58,7 @@ func KeyspacesList(server string) ([]string, error) {
 // @param2 err:error
 func Vtctl(server string, v interface{}) (*VtctlResponse, error) {
 	url := fmt.Sprintf("%v%v%v", server, api_prefix, vtctl)
+	log.Debugf("url:%v", url)
 	data, _, err := http.PostJSON(url, v, deadline, dialtimeout)
 	if err != nil {
 		return nil, errors.Trace(err)
