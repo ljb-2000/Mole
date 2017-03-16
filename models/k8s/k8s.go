@@ -1,12 +1,7 @@
 package k8s
 
 import (
-	"flag"
-	"fmt"
-	"time"
-
 	"github.com/juju/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -17,9 +12,9 @@ type K8sClient struct {
 }
 
 // NewK8sClient - create an new k8s client
-func NewK8sClient(config string) (*K8sClient, error) {
+func NewK8sClient(cfgfile string) (*K8sClient, error) {
 
-	config, err := clientcmd.BuildConfigFromFlags("", config)
+	config, err := clientcmd.BuildConfigFromFlags("", cfgfile)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -31,15 +26,7 @@ func NewK8sClient(config string) (*K8sClient, error) {
 	}
 
 	return &K8sClient{
-		kubeconfig: config,
+		kubeConfig: cfgfile,
 		clientSet:  client,
 	}, nil
-}
-
-// ListPods - list the pods
-func (c *K8sClient) ListPods() {
-	pods, err := clientset.CoreV1().Pods("").List(metav1.ListOptions{})
-	if err != nil {
-		panic(err.Error())
-	}
 }

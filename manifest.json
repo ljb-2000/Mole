@@ -1,0 +1,22 @@
+{
+    "dependencies": {
+        "github.com/astaxie/beego": {
+            "branch": "master"
+        },
+        "github.com/juju/errors": {
+            "revision": "b2c7a7da5b2995941048f60146e67702a292e468"
+        },
+        "github.com/smartystreets/goconvey": {
+            "branch": "master"
+        },
+        "github.com/zssky/tc": {
+            "branch": "master"
+        },
+        "k8s.io/apimachinery": {
+            "branch": "master"
+        },
+        "k8s.io/client-go": {
+            "version": "^2.0.0"
+        }
+    }
+}

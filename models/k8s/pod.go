@@ -1,27 +1,17 @@
 package k8s
 
 import (
-	"fmt"
+	"k8s.io/client-go/pkg/api/v1"
 
 	"github.com/juju/errors"
-	"github.com/kubernetes/kubernetes/pkg/api"
-	"github.com/zssky/tc"
-	"github.com/zssky/tc/http"
 )
 
-// GetPods - get pods list
-func GetPods(server string, namespace string) (*api.PodList, error) {
-	url := fmt.Sprintf(pods, namespace)
-
-	data, _, err := http.SimpleGet(url, deadline, dialtimeout)
+// ListPods - list the pods
+func (c *K8sClient) ListPods(namespace string) (*v1.PodList, error) {
+	pods, err := c.clientSet.Core().Pods(namespace).List(v1.ListOptions{})
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
 
-	var podList *api.PodList
-	if err := tc.DecodeJSON(data, podList); err != nil {
-		return nil, errors.Trace(err)
-	}
-
-	return podList, nil
+	return pods, nil
 }

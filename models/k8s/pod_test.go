@@ -5,14 +5,25 @@ import (
 )
 
 const (
-	server = "http://192.168.180.101:8080"
+	config    = "../../conf/config.yaml"
+	namespace = "default"
 )
 
-// TestGetPods
-func TestGetPods(t *testing.T) {
-	namespace := "default"
+func newClient() *K8sClient {
+	client, err := NewK8sClient(config)
+	if err != nil {
+		panic(err)
+	}
 
-	data, err := GetPods(server, namespace)
+	return client
+}
+
+// TestListPods
+func TestListPods(t *testing.T) {
+
+	client := newClient()
+
+	data, err := client.ListPods(namespace)
 	if err != nil {
 		t.Fatalf("%v", err)
 	}
