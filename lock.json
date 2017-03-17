@@ -1,5 +1,5 @@
 {
-    "memo": "c726258e1198f78ad443f636805793034b20136aa72046a425cddc4b2d97ca67",
+    "memo": "a6feb3db3db2e867b37000f3dbc7bf068dd6667aab1e023943961393ba6bd797",
     "projects": [
         {
             "name": "cloud.google.com/go",
@@ -188,14 +188,6 @@
             ]
         },
         {
-            "name": "github.com/gopherjs/gopherjs",
-            "branch": "master",
-            "revision": "6f5a3c4a73badf117936d7d61a046e2fab8e2adb",
-            "packages": [
-                "js"
-            ]
-        },
-        {
             "name": "github.com/howeyc/gopass",
             "branch": "master",
             "revision": "bf9dde6d0d2c004a008c27aaee91170c786f6db8",
@@ -215,14 +207,6 @@
             "name": "github.com/jonboulle/clockwork",
             "version": "v0.1.0",
             "revision": "2eee05ed794112d45db504eb05aa693efd2b8b09",
-            "packages": [
-                "."
-            ]
-        },
-        {
-            "name": "github.com/jtolds/gls",
-            "branch": "master",
-            "revision": "8ddce2a84170772b95dd5d576c48d517b22cac63",
             "packages": [
                 "."
             ]
@@ -269,26 +253,6 @@
             ]
         },
         {
-            "name": "github.com/smartystreets/assertions",
-            "branch": "master",
-            "revision": "2063fd1cc7c975db70502811a34b06ad034ccdf2",
-            "packages": [
-                ".",
-                "internal/go-render/render",
-                "internal/oglematchers"
-            ]
-        },
-        {
-            "name": "github.com/smartystreets/goconvey",
-            "branch": "master",
-            "revision": "7befa7fd6e2e8ca28d2b94f2d39111929904b08d",
-            "packages": [
-                "convey",
-                "convey/gotest",
-                "convey/reporting"
-            ]
-        },
-        {
             "name": "github.com/spf13/pflag",
             "branch": "master",
             "revision": "dabebe21bf790f782ea4c7bbd2efc430de182afd",
@@ -305,9 +269,17 @@
             ]
         },
         {
+            "name": "github.com/zssky/log",
+            "branch": "master",
+            "revision": "c191741c80b644271233876acace772d6eb07248",
+            "packages": [
+                "."
+            ]
+        },
+        {
             "name": "github.com/zssky/tc",
             "branch": "master",
-            "revision": "854ce37b1d939e95b004315c9001fadc2ef10cd3",
+            "revision": "6d45be8d78a315b47fd94b2a7a364c845cd10432",
             "packages": [
                 ".",
                 "http"
@@ -416,26 +388,7 @@
             "branch": "master",
             "revision": "c810e4931f2cf80a6f0a007f8ba9c05ef0165cee",
             "packages": [
-                "pkg/api/resource",
-                "pkg/apis/meta/v1",
-                "pkg/conversion",
-                "pkg/conversion/queryparams",
-                "pkg/fields",
-                "pkg/labels",
-                "pkg/openapi",
-                "pkg/runtime",
-                "pkg/runtime/schema",
-                "pkg/selection",
-                "pkg/types",
-                "pkg/util/errors",
-                "pkg/util/intstr",
-                "pkg/util/net",
-                "pkg/util/runtime",
-                "pkg/util/sets",
-                "pkg/util/validation",
-                "pkg/util/wait",
-                "pkg/watch",
-                "third_party/forked/golang/reflect"
+                "pkg/util/yaml"
             ]
         },
         {

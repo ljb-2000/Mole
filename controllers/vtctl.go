@@ -14,13 +14,12 @@ type VtctlController struct {
 }
 
 func (c *VtctlController) Post() {
-	defer func() {
-		c.ServeJSON()
-	}()
+	defer c.ServeJSON()
 
 	var params []string
 
 	if err := tc.DecodeJSON(c.Ctx.Input.RequestBody, &params); err != nil {
+		log.Errorf("%v", errors.ErrorStack(err))
 		c.Data["json"] = http.HttpResponse{Code: 1, Message: err.Error()}
 		return
 	}

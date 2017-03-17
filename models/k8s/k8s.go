@@ -13,37 +13,37 @@ type K8sClient struct {
 
 // VttabletPodData
 type VttabletPodData struct {
-	Uid               string
-	Keyspace          string
-	Shard_label       string
-	Alias             string
-	Vitess_image      string
-	Port              int
-	Grpc_port         int
-	Tablet_type       string
-	Backup_flags      string
-	Vtdataroot_volume string
-	Shard             string
+	Uid               string `json:"Uid"`
+	Keyspace          string `json:"Keyspace"`
+	Shard_label       string `json:"ShardLable"`
+	Alias             string `json:"Alias"`
+	Vitess_image      string `json:"VitessImage"`
+	Port              int    `json:"Port"`
+	Grpc_port         int    `json:"GrpcPort"`
+	Tablet_type       string `json:"TabletType"`
+	Backup_flags      string `json:"BackupFlags"`
+	Vtdataroot_volume string `json:"VtdatarootVolume"`
+	Shard             string `json:"Shard"`
 }
 
 // VtgateServiceData
 type VtgateServiceData struct {
-	Cell            string
-	MysqlServerPort int
+	Cell            string `json:"Cell"`
+	MysqlServerPort int    `json:"MysqlServerPort"`
 }
 
 // VtgateRCData
 type VtgateRCData struct {
-	Cell            string
-	VitessImage     string
-	Replicas        int
-	MysqlServerPort int
+	Cell            string `json:"Cell"`
+	VitessImage     string `json:"VitessImage"`
+	Replicas        int    `json:"Replicas"`
+	MysqlServerPort int    `json:"MysqlServerPort"`
 }
 
 // NamespaceData
 type NamespaceData struct {
-	Name   string
-	Labels map[string]string
+	Name   string            `json:"Name"`
+	Labels map[string]string `json:"Labels"`
 }
 
 // NewK8sClient - create an new k8s client

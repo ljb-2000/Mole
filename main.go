@@ -15,6 +15,7 @@ func defaultConfig() {
 	beego.BConfig.Listen.Graceful = beego.AppConfig.DefaultBool("default::graceful", false)
 	beego.BConfig.WebConfig.Session.SessionOn = beego.AppConfig.DefaultBool("default::sessionOn", false)
 	beego.BConfig.WebConfig.Session.SessionName = beego.AppConfig.DefaultString("default::sessionName", "Mole")
+	beego.BConfig.RecoverPanic = beego.AppConfig.DefaultBool("default::recoverPanic", true)
 
 }
 
