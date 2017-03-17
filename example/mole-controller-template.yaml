@@ -1,0 +1,22 @@
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: mole
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        component: api
+        app: mole
+    spec:
+      containers:
+        - name: mole
+          image: zssky/mole:v1.0.0
+          ports:
+            - name: api-server
+              containerPort: 8080
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
