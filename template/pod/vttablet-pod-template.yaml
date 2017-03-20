@@ -1,0 +1,123 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: vttablet-{{.Uid}}
+  labels:
+    component: vttablet
+    keyspace: "{{.Keyspace}}"
+    shard: "{{.ShardLabel}}"
+    tablet: "{{.Alias}}"
+    app: vitess
+spec:
+  containers:
+    - name: vttablet
+      image: {{.VitessImage}}
+      livenessProbe:
+        httpGet:
+          path: /debug/vars
+          port: {{.Port}}
+        initialDelaySeconds: 60
+        timeoutSeconds: 10
+      volumeMounts:
+        - name: syslog
+          mountPath: /dev/log
+        - name: vtdataroot
+          mountPath: /vt/vtdataroot
+        - name: certs
+          readOnly: true
+          # Mount root certs from the host OS into the location
+          # expected for our container OS (Debian):
+          mountPath: /etc/ssl/certs/ca-certificates.crt
+      resources:
+        limits:
+          memory: "1Gi"
+          cpu: "500m"
+      ports:
+        - name: web
+          containerPort: {{.Port}}
+        - name: grpc
+          containerPort: {{.GrpcPort}}
+      command:
+        - bash
+        - "-c"
+        - >-
+          set -e
+
+          mkdir -p $VTDATAROOT/tmp
+
+          chown -R vitess /vt
+
+          su -p -s /bin/bash -c "/vt/bin/vttablet
+          -topo_implementation etcd
+          -etcd_global_addrs http://etcd-global:4001
+          -log_dir $VTDATAROOT/tmp
+          -alsologtostderr
+          -port {{.Port}}
+          -grpc_port {{.GrpcPort}}
+          -service_map 'grpc-queryservice,grpc-tabletmanager,grpc-updatestream'
+          -tablet-path {{.Alias}}
+          -tablet_hostname $(hostname -i)
+          -init_keyspace {{.Keyspace}}
+          -init_shard {{.Shard}}
+          -init_tablet_type {{.TabletType}}
+          -health_check_interval 5s
+          -mysqlctl_socket $VTDATAROOT/mysqlctl.sock
+          -db-config-app-uname vt_app
+          -db-config-app-dbname vt_{{.Keyspace}}
+          -db-config-app-charset utf8
+          -db-config-dba-uname vt_dba
+          -db-config-dba-dbname vt_{{.Keyspace}}
+          -db-config-dba-charset utf8
+          -db-config-repl-uname vt_repl
+          -db-config-repl-dbname vt_{{.Keyspace}}
+          -db-config-repl-charset utf8
+          -db-config-filtered-uname vt_filtered
+          -db-config-filtered-dbname vt_{{.Keyspace}}
+          -db-config-filtered-charset utf8
+          -enable_semi_sync
+          -enable_replication_reporter
+          -orc_api_url http://orchestrator/api
+          -orc_discover_interval 5m
+          -restore_from_backup {{.BackupFlags}}" vitess
+    - name: mysql
+      image: {{.VitessImage}}
+      volumeMounts:
+        - name: syslog
+          mountPath: /dev/log
+        - name: vtdataroot
+          mountPath: /vt/vtdataroot
+      resources:
+        limits:
+          memory: "1Gi"
+          cpu: "500m"
+      command:
+        - sh
+        - "-c"
+        - >-
+          mkdir -p $VTDATAROOT/tmp &&
+          chown -R vitess /vt
+
+          su -p -c "/vt/bin/mysqlctld
+          -log_dir $VTDATAROOT/tmp
+          -alsologtostderr
+          -tablet_uid {{.Uid}}
+          -socket_file $VTDATAROOT/mysqlctl.sock
+          -db-config-dba-uname vt_dba
+          -db-config-dba-charset utf8
+          -init_db_sql_file $VTROOT/config/init_db.sql" vitess
+      env:
+        - name: EXTRA_MY_CNF
+          value: /vt/config/mycnf/master_mysql56.cnf
+  volumes:
+    - name: syslog
+      hostPath: {path: /dev/log}
+    - name: vtdataroot
+      {{.VtdatarootVolume}}
+    - name: certs
+      # Uncomment one of the following lines to configure the location
+      # of the root certificates file on your host OS. We need this so
+      # we can import it into the container OS.
+      # If your host OS is Fedora/RHEL:
+      #hostPath: {path: /etc/pki/tls/certs/ca-bundle.crt}
+      # If your host OS is Debian/Ubuntu/Gentoo:
+      hostPath: {path: /etc/ssl/certs/ca-certificates.crt}

@@ -13,31 +13,38 @@ type K8sClient struct {
 
 // VttabletPodData
 type VttabletPodData struct {
-	Uid               string `json:"Uid"`
-	Keyspace          string `json:"Keyspace"`
-	Shard_label       string `json:"ShardLable"`
-	Alias             string `json:"Alias"`
-	Vitess_image      string `json:"VitessImage"`
-	Port              int    `json:"Port"`
-	Grpc_port         int    `json:"GrpcPort"`
-	Tablet_type       string `json:"TabletType"`
-	Backup_flags      string `json:"BackupFlags"`
-	Vtdataroot_volume string `json:"VtdatarootVolume"`
-	Shard             string `json:"Shard"`
+	Uid              string `json:"Uid"`
+	Keyspace         string `json:"Keyspace"`
+	ShardLabel       string `json:"ShardLable"`
+	Alias            string `json:"Alias"`
+	VitessImage      string `json:"VitessImage"`
+	Port             int    `json:"Port"`
+	GrpcPort         int    `json:"GrpcPort"`
+	TabletType       string `json:"TabletType"`
+	BackupFlags      string `json:"BackupFlags"`
+	VtdatarootVolume string `json:"VtdatarootVolume"`
+	Shard            string `json:"Shard"`
+	TabletSubdir     string `json:"TabletSubdir"`
 }
 
 // VtgateServiceData
 type VtgateServiceData struct {
+	Type            string `json:"Type"`
 	Cell            string `json:"Cell"`
+	ServiceType     string `json"ServiceType"`
 	MysqlServerPort int    `json:"MysqlServerPort"`
 }
 
 // VtgateRCData
 type VtgateRCData struct {
-	Cell            string `json:"Cell"`
-	VitessImage     string `json:"VitessImage"`
-	Replicas        int    `json:"Replicas"`
-	MysqlServerPort int    `json:"MysqlServerPort"`
+	Type             string `json:"Type"`
+	Cell             string `json:"Cell"`
+	VitessImage      string `json:"VitessImage"`
+	Replicas         int    `json:"Replicas"`
+	MysqlServerPort  int    `json:"MysqlServerPort"`
+	BackupFlags      string `json:"BackupFlags"`
+	TestFlags        string `json:"TestFlags"`
+	VtdatarootVolume string `json:"VtdatarootVolume"`
 }
 
 // NamespaceData

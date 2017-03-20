@@ -5,47 +5,41 @@ metadata:
   labels:
     component: vttablet
     keyspace: "{{.Keyspace}}"
-    shard: "{{.Shard_label}}"
+    shard: "{{.ShardLabel}}"
     tablet: "{{.Alias}}"
     app: vitess
 spec:
   containers:
     - name: vttablet
-      image: {{.Vitess_image}}
-      livenessProbe:
-        httpGet:
-          path: /debug/vars
-          port: {{.Port}}
-        initialDelaySeconds: 60
-        timeoutSeconds: 10
+      image: vitess/root
+      resources:
+        limits:
+          memory: "4Gi"
+          cpu: "2"
       volumeMounts:
         - name: syslog
           mountPath: /dev/log
         - name: vtdataroot
           mountPath: /vt/vtdataroot
-        - name: certs
-          readOnly: true
-          # Mount root certs from the host OS into the location
-          # expected for our container OS (Debian):
-          mountPath: /etc/ssl/certs/ca-certificates.crt
-      resources:
-        limits:
-          memory: "1Gi"
-          cpu: "500m"
-      ports:
-        - name: web
-          containerPort: {{.Port}}
-        - name: grpc
-          containerPort: {{.Grpc_port}}
       command:
         - bash
         - "-c"
         - >-
           set -e
 
+          mysql_socket="$VTDATAROOT/{{.TabletSubdir}}/mysql.sock"
+
           mkdir -p $VTDATAROOT/tmp
 
           chown -R vitess /vt
+
+          while [ ! -e $mysql_socket ]; do
+          echo "[$(date)] waiting for $mysql_socket" ;
+          sleep 1 ;
+          done
+
+          su -p -s /bin/bash -c "mysql -u vt_dba -S $mysql_socket
+          -e 'CREATE DATABASE IF NOT EXISTS vt_{{.Keyspace}}'" vitess
 
           su -p -s /bin/bash -c "/vt/bin/vttablet
           -topo_implementation etcd
@@ -53,14 +47,13 @@ spec:
           -log_dir $VTDATAROOT/tmp
           -alsologtostderr
           -port {{.Port}}
-          -grpc_port {{.Grpc_port}}
+          -grpc_port {{.GrpcPort}}
           -service_map 'grpc-queryservice,grpc-tabletmanager,grpc-updatestream'
           -tablet-path {{.Alias}}
           -tablet_hostname $(hostname -i)
           -init_keyspace {{.Keyspace}}
           -init_shard {{.Shard}}
-          -init_tablet_type {{.Tablet_type}}
-          -health_check_interval 5s
+          -init_tablet_type {{.TabletType}}
           -mysqlctl_socket $VTDATAROOT/mysqlctl.sock
           -db-config-app-uname vt_app
           -db-config-app-dbname vt_{{.Keyspace}}
@@ -74,22 +67,24 @@ spec:
           -db-config-filtered-uname vt_filtered
           -db-config-filtered-dbname vt_{{.Keyspace}}
           -db-config-filtered-charset utf8
-          -enable_semi_sync
-          -enable_replication_reporter
-          -orc_api_url http://orchestrator/api
-          -orc_discover_interval 5m
-          -restore_from_backup {{.Backup_flags}}" vitess
+          -queryserver-config-transaction-cap 300
+          -queryserver-config-schema-reload-time 1
+          -queryserver-config-pool-size 100
+          -enable_replication_reporter" vitess
+      env:
+        - name: GOMAXPROCS
+          value: "16"
     - name: mysql
-      image: {{.Vitess_image}}
+      image: vitess/root
+      resources:
+        limits:
+          memory: "4Gi"
+          cpu: "2"
       volumeMounts:
         - name: syslog
           mountPath: /dev/log
         - name: vtdataroot
           mountPath: /vt/vtdataroot
-      resources:
-        limits:
-          memory: "1Gi"
-          cpu: "500m"
       command:
         - sh
         - "-c"
@@ -107,17 +102,9 @@ spec:
           -init_db_sql_file $VTROOT/config/init_db.sql" vitess
       env:
         - name: EXTRA_MY_CNF
-          value: /vt/config/mycnf/master_mysql56.cnf
+          value: /vt/config/mycnf/benchmark.cnf:/vt/config/mycnf/master_mysql56.cnf
   volumes:
     - name: syslog
       hostPath: {path: /dev/log}
     - name: vtdataroot
-      {{.Vtdataroot_volume}}
-    - name: certs
-      # Uncomment one of the following lines to configure the location
-      # of the root certificates file on your host OS. We need this so
-      # we can import it into the container OS.
-      # If your host OS is Fedora/RHEL:
-      #hostPath: {path: /etc/pki/tls/certs/ca-bundle.crt}
-      # If your host OS is Debian/Ubuntu/Gentoo:
-      hostPath: {path: /etc/ssl/certs/ca-certificates.crt}
+      {{.VtdatarootVolume}}

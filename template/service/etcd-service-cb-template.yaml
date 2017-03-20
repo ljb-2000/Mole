@@ -1,0 +1,18 @@
+# Headless service for etcd cluster bootstrap.
+kind: Service
+apiVersion: v1
+metadata:
+  name: etcd-{{.Cell}}-srv
+  labels:
+    component: etcd
+    cell: {{.Cell}}
+    app: vitess
+spec:
+  clusterIP: None
+  ports:
+    - name: etcd-server
+      port: 7001
+  selector:
+    component: etcd
+    cell: {{.Cell}}
+    app: vitess

@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strings"
+
 	"github.com/astaxie/beego"
 	"github.com/juju/errors"
 	"github.com/zssky/Mole/models/k8s"
@@ -42,13 +44,27 @@ func (c *ServicesController) Get() {
 func (c *ServicesController) Post() {
 	defer c.ServeJSON()
 
+	var svcyaml string
 	namespace := c.GetString(":namespace")
-	svcyaml := beego.AppConfig.DefaultString("k8s::serviceyaml", "")
 
 	var params k8s.VtgateServiceData
 	if err := tc.DecodeJSON(c.Ctx.Input.RequestBody, &params); err != nil {
 		log.Errorf("%v", errors.ErrorStack(err))
 		c.Data["json"] = http.HttpResponse{Code: 1, Message: err.Error()}
+		return
+	}
+
+	reqType := strings.ToUpper(params.Type)
+	if reqType == "ETCDLB" {
+		svcyaml = beego.AppConfig.DefaultString("k8s::etcdlbsvcyaml", "")
+	} else if reqType == "ETCDCB" {
+		svcyaml = beego.AppConfig.DefaultString("k8s::etcdcbsvcyaml", "")
+	} else if reqType == "VTCTLD" {
+		svcyaml = beego.AppConfig.DefaultString("k8s::vtctldsvcyaml", "")
+	} else if reqType == "VTGATE" {
+		svcyaml = beego.AppConfig.DefaultString("k8s::vtgatesvcyaml", "")
+	} else {
+		c.Data["json"] = http.HttpResponse{Code: 1, Message: errors.Errorf("unknow request type").Error()}
 		return
 	}
 

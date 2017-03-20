@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: mole
-          image: zssky/mole:v1.0.0
+          image: 192.168.212.19/vitesss/mole:v1.0.1
           ports:
             - name: api-server
               containerPort: 8080
