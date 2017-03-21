@@ -10,8 +10,6 @@ const (
 	server = "http://vtctld.default.svc.hades.local:15000"
 )
 
-var keyspaceList []string
-
 // TestKeyspacesList
 func TestKeyspacesList(t *testing.T) {
 	list, err := KeyspacesList(server)
@@ -35,25 +33,22 @@ func TestCreateKeyspace(t *testing.T) {
 		t.Fatalf("%v", err)
 	}
 
-	keyspaceList = append(keyspaceList)
 	t.Logf("error:%v output:%v", resp.Error, resp.Output)
 }
 
 // TestDeleteKeyspace
 func TestDeleteKeyspace(t *testing.T) {
-	for _, keyspace := range keyspaceList {
-		param := []string{
-			"DeleteKeyspace",
-			"-recursive",
-			keyspace,
-		}
-
-		resp, err := Vtctl(server, param)
-		if err != nil {
-			t.Fatalf("%v", err)
-		}
-		t.Logf("error:%v output:%v", resp.Error, resp.Output)
+	param := []string{
+		"DeleteKeyspace",
+		"-recursive",
+		"test",
 	}
+
+	resp, err := Vtctl(server, param)
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+	t.Logf("error:%v output:%v", resp.Error, resp.Output)
 }
 
 // TestValidateKeyspace
