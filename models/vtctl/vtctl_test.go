@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	server = "http://192.168.80.172:15000"
+	server = "http://vtctld.default.svc.hades.local:15000"
 )
 
 // TestKeyspacesList

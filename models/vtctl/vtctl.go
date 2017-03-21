@@ -46,7 +46,7 @@ func KeyspacesList(server string) ([]string, error) {
 
 	list := make([]string, 0)
 
-	err = tc.DecodeJSON(data, list)
+	err = tc.DecodeJSON(data, &list)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -66,7 +66,7 @@ func Vtctl(server string, v interface{}) (*VtctlResponse, error) {
 	}
 
 	var resp VtctlResponse
-	err = tc.DecodeJSON(data, resp)
+	err = tc.DecodeJSON(data, &resp)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -84,7 +84,7 @@ func Shards(server string, keyspace string) ([]string, error) {
 	}
 
 	list := make([]string, 0)
-	err = tc.DecodeJSON(data, list)
+	err = tc.DecodeJSON(data, &list)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -103,7 +103,7 @@ func Tablets(server string, shard string) ([]Tablet, error) {
 	}
 
 	list := make([]Tablet, 0)
-	err = tc.DecodeJSON(data, list)
+	err = tc.DecodeJSON(data, &list)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -129,7 +129,7 @@ func SchemaApply(server string, keyspace string, sql string) (*VtctlResponse, er
 	}
 
 	var resp VtctlResponse
-	err = tc.DecodeJSON(data, resp)
+	err = tc.DecodeJSON(data, &resp)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
