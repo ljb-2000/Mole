@@ -38,6 +38,7 @@ type Tablet struct {
 func KeyspacesList(server string) ([]string, error) {
 
 	url := fmt.Sprintf("%v%v%v", server, api_prefix, keyspaces)
+	log.Debugf("url:%v", url)
 	data, _, err := http.SimpleGet(url, deadline, dialtimeout)
 	if err != nil {
 		return nil, errors.Trace(err)
@@ -76,6 +77,7 @@ func Vtctl(server string, v interface{}) (*VtctlResponse, error) {
 // Shards - get shards list
 func Shards(server string, keyspace string) ([]string, error) {
 	url := fmt.Sprintf("%v%v%v%v", server, api_prefix, shards, keyspace)
+	log.Debugf("url:%v", url)
 	data, _, err := http.SimpleGet(url, deadline, dialtimeout)
 	if err != nil {
 		return nil, errors.Trace(err)
@@ -93,6 +95,7 @@ func Shards(server string, keyspace string) ([]string, error) {
 // Tablets
 func Tablets(server string, shard string) ([]Tablet, error) {
 	url := fmt.Sprintf("%v%v%v", server, api_prefix, tablets)
+	log.Debugf("url:%v", url)
 	data := []byte(fmt.Sprintf("shard=%v", shard))
 	data, _, err := http.PostForm(url, data, deadline, dialtimeout)
 	if err != nil {
@@ -111,6 +114,7 @@ func Tablets(server string, shard string) ([]Tablet, error) {
 // SchemaApply
 func SchemaApply(server string, keyspace string, sql string) (*VtctlResponse, error) {
 	url := fmt.Sprintf("%v%v%v", server, api_prefix, schema_apply)
+	log.Debugf("url:%v", url)
 	v := struct {
 		Keyspace string
 		SQL      string

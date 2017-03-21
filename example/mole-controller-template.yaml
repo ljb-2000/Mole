@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: mole
-          image: 192.168.212.19/vitesss/mole:v1.0.1
+          image: 192.168.212.19/vitesss/mole:v1.0.2
           ports:
             - name: api-server
               containerPort: 8080

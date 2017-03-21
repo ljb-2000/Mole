@@ -5,6 +5,8 @@ metadata:
   labels:
     component: api
     app: mole
+  annotations:
+    jdos.jd.com/maxconnect: "10240"
 spec:
   ports:
     - port: 80
@@ -12,5 +14,4 @@ spec:
   selector:
     component: api
     app: mole
-  type: LoadBalancer
-
+  type: ClusterIP
