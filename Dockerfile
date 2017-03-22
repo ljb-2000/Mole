@@ -1,4 +1,3 @@
-#FROM scratch
 FROM ubuntu
 COPY ./bin/Mole_Docker /opt/mole/Mole
 COPY ./conf /opt/mole/conf
